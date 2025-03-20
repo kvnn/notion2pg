@@ -236,12 +236,15 @@ def get_value(property):
         # List[str] - URL of the file
         files = []
         for f in property["files"]:
-            url = f["file"]["url"]
-            # Remove authentication information from files uploaded to Notion;
-            # it is too short lived to be worth storing in a database.
-            if "/secure.notion-static.com/" in url:
-                url = url.partition("?")[0]
-            files.append(url)
+            if "file" in f:
+                url = f["file"]["url"]
+                # Remove authentication information from files uploaded to Notion;
+                # it is too short lived to be worth storing in a database.
+                if "/secure.notion-static.com/" in url:
+                    url = url.partition("?")[0]
+                files.append(url)
+            else:
+                print(f'WARNING: File {f["name"]} is not available')
         return files
 
     elif type_ == "checkbox":
